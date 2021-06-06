@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import DataComponent from '../components/DataComponents/DataComponent';
+import { View } from 'react-native'
 import FileComponent from '../components/FileComponents/FileComponent';
-import CardComponent from '../components/HomeComponents/cardComponent';
+import firebase from '../utils/firebase';
+import 'firebase/firestore'
 
 
 const FilePage = () => {
 
-    const [nombre, setNombre] = useState('Victor Manuel Velazquez Fuentes');
-    const [edad, setEdad] = useState(21);
-    const [enefermedades, setEnfermedades] = useState('Diabetes');
-    const [medicamentos, setMedicamentos] = useState('Aspirina, Ibuprofeno, Metamizo, Vitamina C');
-    const [sangre, setSangre] = useState('0+');
-    const [alergias, setAlergias] = useState('Ninguna');
-
+    const [user, setUser] = useState('');
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((response) => {
+            setUser(response);
+            console.log('Consulto cosas')
+        });
+    })
     return (
         <View>
-            <FileComponent Nombre={nombre} Edad={edad} TipoSangre={sangre} Medicamentos={medicamentos} EnfermedadesCronicas={enefermedades} Alergias={alergias}></FileComponent>
+            <FileComponent user={user}></FileComponent>
         </View >
     )
 }

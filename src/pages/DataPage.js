@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import DataComponent from '../components/DataComponents/DataComponent';
-
+import firebase from '../utils/firebase';
+import 'firebase/firestore'
 
 const DataPage = () => {
-
-    const [nombre, setNombre] = useState('Victor Manuel Velazquez Fuentes');
-    const [correo, setCorreo] = useState('victor.velazfuyentez@gmail.com');
-    const [contrasenia, setContraseña] = useState('12345');
-    const [carrera, setCarrera] = useState('ISSC');
-    const [semestre, setSemestre] = useState('Sexto');
-    const [username, setUsername] = useState('vycmany');
+    const [user, setUser] = useState('');
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((response) => {
+            setUser(response);
+            console.log('Consulto cosas')
+        });
+    })
 
     return (
         <View style={{ backgroundColor: '#396371' }}>
-            <DataComponent Nombre={nombre} Correo={correo} Contrasenia={contrasenia} Carrera={carrera} Semestre={semestre} Username={username} />
+            <DataComponent user={user} />
         </View >
     )
 }
-
 export default DataPage
 
+
+// 

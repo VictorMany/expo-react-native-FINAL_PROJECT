@@ -30,7 +30,10 @@ const RegisterPage = ({ navigation }) => {
                     .then(cred => {
                         firebase.firestore().collection('usuarios').doc(cred.user.uid).set({
                             edad: formData.edad,
-                            nombre: formData.nombre
+                            nombre: formData.nombre,
+                            email: formData.email,
+                            carrera: 'Carrera',
+                            semestre: 'Semestre actual'
                         }).then(() => {
                             navigation.navigate('HomePage')
                         }).catch(err => {
@@ -49,7 +52,6 @@ const RegisterPage = ({ navigation }) => {
                 console.log(error);
             }
         }
-        console.log("Este es el error", error)
         setFormError(error);
     }
 

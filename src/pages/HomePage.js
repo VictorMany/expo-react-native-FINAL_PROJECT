@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import CardComponent from '../components/HomeComponents/cardComponent';
-
+import firebase from '../utils/firebase';
+import 'firebase/firestore'
 
 const HomePage = ({ navigation }) => {
     const [text, setText] = useState('');
@@ -11,14 +12,10 @@ const HomePage = ({ navigation }) => {
         require('../img/consejos.png'),
         require('../img/expediente.png'),
     ]);
-
-
-
-
-    useEffect(() => {
-
-    }, [text, imgs]);
-    const action = () => navigation.navigate(text);
+    
+    const action = () => {
+        navigation.navigate(text);
+    };
 
     return (
         <View style={{ backgroundColor: "#396371", height: "100%" }}>
@@ -114,10 +111,24 @@ const HomePage = ({ navigation }) => {
             }}>
                 <TouchableOpacity style={{
                     height: '40%', width: '90%', alignContent: 'center', alignItems: "center",
-                    justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147", marginBottom: 20
+                    justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147", marginBottom: 10
                 }} onPress={() => navigation.navigate('profile')}>
                     <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Actualizar mi estado</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity style={{
+                    height: '40%', width: '100%', alignContent: 'center', alignItems: "center",
+                    justifyContent: "center", alignSelf: 'center', backgroundColor: "#2B68A1", marginBottom: -10
+                }} onPress={() => {
+                    firebase.auth().signOut().then(() => {
+                        console.log("El usuario salió");
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Cerrar sesión</Text>
+                </TouchableOpacity>
+
             </View>
         </View >
     )

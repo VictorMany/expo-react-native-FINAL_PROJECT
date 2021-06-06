@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { validateEmail } from "../utils/validation";
 import firebase from '../utils/firebase';
@@ -7,6 +7,7 @@ const LoginPage = ({ navigation }) => {
     const [formData, setFormData] = useState(defaultValue);
     const [formError, setFormError] = useState({});
     const [color, setColor] = useState("#29444D");
+
     const login = () => {
         let error = {};
         if (!formData.email || !formData.password) {
