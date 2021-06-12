@@ -23,7 +23,7 @@ const LoginPage = ({ navigation }) => {
             firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
                 .then(() => {
                     console.log("ok");
-                    navigation.navigate('HomePage')
+                    navigation.replace('HomePage')
                 })
                 .catch(() => {
                     setFormError({

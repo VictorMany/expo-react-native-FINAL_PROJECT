@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
 
 export default function CardAdviceComponent(props) {
-    const { img, title, description } = props;
+    const { numero, title, description, setText, user } = props;
 
-    return (
-        <View style={{ flexDirection: "row", height: 130, width: '100%', backgroundColor: '#141313', borderRadius: 20, marginTop: 10 }}>
-            <View style={{ flexDirection: "column", width: '30%', height: '100%' }}>
-                <Image source={img}
-                    style={{ width: "100%", height: "100%", borderRadius: 10 }}
-                ></Image>
+    if (user.uid == 'IdXiTtKd8LaNFq6IVZ3HlBg5G5z1') {
+        return (
+            <TouchableOpacity style={{ flexDirection: "row", height: 130, width: '100%', backgroundColor: '#141313', borderRadius: 20, marginTop: 10 }} onPress={() => { setText() }}>
+                <View style={{ flexDirection: "column", width: '20%', height: '100%', alignContent: 'center', alignItems: 'center', alignSelf: 'center', paddingVertical: '12%' }}>
+                    <Text style={{ fontWeight: 'bold', color: 'orange', fontSize: 44 }}>{numero}</Text>
+                </View>
+                <View style={{ flexDirection: "column", width: '80%', height: '100%', padding: 10 }}>
+                    <Text style={styles.text}>{title}</Text>
+                    <Text style={styles.textDetail}>{description}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+    else
+        return (
+            <View style={{ flexDirection: "row", height: 130, width: '100%', backgroundColor: '#141313', borderRadius: 20, marginTop: 10 }} onPress={() => { setText() }}>
+                <View style={{ flexDirection: "column", width: '20%', height: '100%', alignContent: 'center', alignItems: 'center', alignSelf: 'center', paddingVertical: '12%' }}>
+                    <Text style={{ fontWeight: 'bold', color: 'orange', fontSize: 44 }}>{numero}</Text>
+                </View>
+                <View style={{ flexDirection: "column", width: '80%', height: '100%', padding: 10 }}>
+                    <Text style={styles.text}>{title}</Text>
+                    <Text style={styles.textDetail}>{description}</Text>
+                </View>
             </View>
-            <View style={{ flexDirection: "column", width: '70%', height: '100%', padding: 10 }}>
-                <Text style={styles.text}>{title}</Text>
-                <Text style={styles.textDetail}>{description}</Text>
-            </View>
-        </View>
-    );
+        )
+
 }
 
 
@@ -39,8 +52,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white',
         padding: 1,
-        
+
     },
+
     textDetail: {
         fontSize: 12,
         color: 'grey',

@@ -11,7 +11,6 @@ import AsistancePage from './src/pages/AsistancePage';
 import ProfileComponent from './src/components/StatusProfile/ProfileComponent';
 import firebase from './src/utils/firebase';
 import 'firebase/auth'
-import { Button } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -24,22 +23,19 @@ const myApp = () => {
 
   if (user === undefined) return null;
 
-
   return (
     <NavigationContainer>
+      <Stack.Navigator initialRouteName={user ? 'HomePage' : 'LoginPage'}>
 
-      <Stack.Navigator>
-        {
-          user ?
-            <Stack.Screen name="HomePage" options={{
-              title: 'Regreso seguro', headerTintColor: 'white', headerStyle: {
-                backgroundColor: '#29444D'
-              },
-            }} component={HomePage} /> :
-            <Stack.Screen name="LoginPage" options={{
-              title: 'Login'
-            }} component={LoginPage} />
-        }
+        <Stack.Screen name="HomePage" options={{
+          title: 'Regreso seguro', headerTintColor: 'white', headerStyle: {
+            backgroundColor: '#29444D'
+          },
+        }} component={HomePage} />
+
+        <Stack.Screen name="LoginPage" options={{
+          title: 'Login'
+        }} component={LoginPage} />
 
         <Stack.Screen name="RegisterPage" component={RegisterPage} options={{
           title: 'Registro', headerTintColor: '#29444D'
@@ -52,13 +48,15 @@ const myApp = () => {
         <Stack.Screen name="Datos" options={{
           title: 'Datos personales', headerTintColor: 'white', headerStyle: {
             backgroundColor: '#29444D'
-          },
+          },// headerShown: false
         }} component={DataPage} />
+
+
         <Stack.Screen name="Expediente" component={FilePage} options={{
-          title: 'Expediente Médico', headerTintColor: 'white', headerStyle: {
-            backgroundColor: '#29444D'
-          },
+          title: 'Expediente Médico', headerTintColor: 'white', headerStyle: { backgroundColor: '#29444D' },
+          //headerShown: false
         }} />
+
         <Stack.Screen name="Asistencia" options={{
           title: 'Asistencia', headerTintColor: 'white', headerStyle: {
             backgroundColor: '#29444D'

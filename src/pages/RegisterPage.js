@@ -35,7 +35,7 @@ const RegisterPage = ({ navigation }) => {
                             carrera: 'Carrera',
                             semestre: 'Semestre actual'
                         }).then(() => {
-                            navigation.navigate('HomePage')
+                            navigation.replace('HomePage')
                         }).catch(err => {
                             console.log(err);
                         });

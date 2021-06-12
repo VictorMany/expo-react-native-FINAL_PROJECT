@@ -4,6 +4,7 @@ import CardComponent from '../components/HomeComponents/cardComponent';
 import firebase from '../utils/firebase';
 import 'firebase/firestore'
 
+
 const HomePage = ({ navigation }) => {
     const [text, setText] = useState('');
     const [imgs, setimages] = useState([
@@ -12,9 +13,46 @@ const HomePage = ({ navigation }) => {
         require('../img/consejos.png'),
         require('../img/expediente.png'),
     ]);
-    
-    const action = () => {
-        navigation.navigate(text);
+
+    const [user, setUser] = useState('');
+
+    const [resumenSalud, setResumenSalud] = useState({
+        riesgo: 'Actualizar',
+        validado: 'Actualizar',
+        vence: 'Actualizar',
+    })
+
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((response) => {
+            setUser(response);
+            console.log(response)
+        });
+
+        firebase.firestore().collection('estatus').doc(user.uid)
+            .get()
+            .then(form => {
+                var forma = {
+                    riesgo: '',
+                    validado: '',
+                    vence: '',
+                }
+
+                forma = { ...forma, ...form.data() }
+
+                console.log(form.data())
+                if (form.data() != undefined) {
+                    setResumenSalud(forma);
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        console.log(resumenSalud)
+    }, [user]);
+
+
+    const action = async () => {
+        await navigation.navigate(text, { user: user });
     };
 
     return (
@@ -33,7 +71,7 @@ const HomePage = ({ navigation }) => {
             }}>
                 <View style={{ width: '35%', height: '100%', padding: 5 }}>
                     <Image source={require('../img/perfil.png')}
-                        style={{ width: "100%", height: "100%", borderRadius: 50 }}
+                        style={{ width: 85, height: 85, borderRadius: '50%' }}
                     /></View>
                 <View style={[styles.container, {
                     // Try setting `flexDirection` to `"row"`.
@@ -44,7 +82,7 @@ const HomePage = ({ navigation }) => {
                     borderRadius: 10,
                     margin: 10,
                     height: '79%',
-                    marginTop: 15
+                    marginTop: 12
                 }]}>
                     <View style={{
                         // Try setting `flexDirection` to `"row"`.
@@ -60,9 +98,9 @@ const HomePage = ({ navigation }) => {
                         flexDirection: "column",
                         width: '50%',
                     }}>
-                        <View style={{ flex: 1, }}><Text style={{ color: 'green', fontWeight: 'bold' }}>Bajo</Text></View>
-                        <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>21/05/2020</Text></View>
-                        <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>En 24 hrs</Text></View>
+                        <View style={{ flex: 1, }}><Text style={{ color: 'green', fontWeight: 'bold' }}>{resumenSalud.riesgo}</Text></View>
+                        <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>{resumenSalud.validado}</Text></View>
+                        <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>{resumenSalud.vence}</Text></View>
                     </View>
                 </View>
             </View >
@@ -73,7 +111,7 @@ const HomePage = ({ navigation }) => {
                 height: '60%',
                 marginTop: 5
             }}>
-                <View style={styles.containerColumn}>
+                <View style={[styles.containerColumn, { paddingLeft: 10 }]}>
                     <View style={styles.container1}>
                         <View style={styles.containerHijo}>
                             <CardComponent text={'Datos'} img={imgs[0]} action={action} setText={setText}></CardComponent>
@@ -86,7 +124,7 @@ const HomePage = ({ navigation }) => {
                     </View>
 
                 </View>
-                <View style={styles.containerColumn}>
+                <View style={[styles.containerColumn, { paddingRight: 10 }]}>
                     <View style={styles.container1}>
                         <View style={styles.containerHijo}>
                             <CardComponent text={'Consejos'} img={imgs[2]} action={action} setText={setText}></CardComponent>
@@ -112,7 +150,7 @@ const HomePage = ({ navigation }) => {
                 <TouchableOpacity style={{
                     height: '40%', width: '90%', alignContent: 'center', alignItems: "center",
                     justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147", marginBottom: 10
-                }} onPress={() => navigation.navigate('profile')}>
+                }} onPress={() => navigation.navigate('profile', { user: user })}>
                     <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Actualizar mi estado</Text>
                 </TouchableOpacity>
 
@@ -120,6 +158,7 @@ const HomePage = ({ navigation }) => {
                     height: '40%', width: '100%', alignContent: 'center', alignItems: "center",
                     justifyContent: "center", alignSelf: 'center', backgroundColor: "#2B68A1", marginBottom: -10
                 }} onPress={() => {
+                    navigation.replace('LoginPage');
                     firebase.auth().signOut().then(() => {
                         console.log("El usuario salió");
                     }).catch(err => {
@@ -128,7 +167,6 @@ const HomePage = ({ navigation }) => {
                 }}>
                     <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Cerrar sesión</Text>
                 </TouchableOpacity>
-
             </View>
         </View >
     )
@@ -150,11 +188,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'black'
     },
     container1: {
-
         width: '100%',
         height: '50%',
         alignContent: 'center',
-        padding: 10,
+        padding: 4,
     },
     containerColumn: {
         flexDirection: "column",

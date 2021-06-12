@@ -5,18 +5,11 @@ import firebase from '../utils/firebase';
 import 'firebase/firestore'
 
 
-const FilePage = () => {
+const FilePage = ({ route }) => {
 
-    const [user, setUser] = useState('');
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged((response) => {
-            setUser(response);
-            console.log('Consulto cosas')
-        });
-    })
     return (
         <View>
-            <FileComponent user={user}></FileComponent>
+            <FileComponent user={route.params.user}></FileComponent>
         </View >
     )
 }

@@ -14,9 +14,7 @@ export default function DataComponent(props) {
     const actualizarData = () => {
         try {
             if (actualizar) {
-
                 var formActualizado = { ...doc, ...form }
-
                 //Si nuestro actualizar es true, entonces actualizamos nuestros datos
                 console.log("Se actualizaron los datos")
                 firebase.firestore().collection('usuarios').doc(user.uid).update({

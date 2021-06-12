@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, Text } from 'react-native';
+import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import CardAdviceComponent from './CardAdviceComponent'
+import firebase from '../../utils/firebase';
+import 'firebase/firestore'
 
 export default function AdviceComponent(props) {
-    const [title, setTitle] = useState([
-        'Usar mascarilla',
-        'Lavarse las manos',
-        'Llorar mucho porque ya es jueves'
-    ]);
-    const [description, setDescription] = useState([
-        'Las mascarillas se deben usar además de mantener una distancia de al menos6 pies, especialmente si está conpersonas que no viven con usted',
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys tandard dummy text ever since the',
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys tandard dummy text ever since the',
-
-    ]);
     const [imgs, setImages] = useState([
         require('../../img/mascarilla.png'),
         require('../../img/manos.jpg'),
@@ -21,31 +12,146 @@ export default function AdviceComponent(props) {
         require('../../img/expediente.png'),
     ]);
 
+    //Ya están
+    const [actualizar, setActualizar] = useState(false)
+    const { user } = props
+    const [arr, setArr] = useState([])
 
-    
+    const [formulario, setFormulario] = useState({})
+    //Ya estan
+    var form = {}
+    const onChangeText = (value, param) => {
+        switch (param) {
+            case "titulo":
+                form.titulo = value;
+                break;
+            case "consejo":
+                form.consejo = value;
+                break;
+            case "imagen":
+                form.imagen = value;
+                break;
+
+            default:
+                break;
+        }
+        console.log(form)
+    }
+
+    const actualizarData = async () => {
+        console.log(formulario);
+        try {
+            if (actualizar) {
+                var formActualizado = { ...formulario, ...form }
+                //Si nuestro actualizar es true, entonces actualizamos nuestros datos
+                console.log("Se actualizaron los datos")
+                console.log(formActualizado);
+                await firebase.firestore().collection('consejo').doc(formActualizado.id).set(formActualizado);
+            }
+            setActualizar(!actualizar)
+        } catch (error) {
+            console.log("Error al actualizar", error)
+        }
+    };
+
+    //Ya está
+    useEffect(() => {
+        var arreglo = []
+        firebase.firestore().collection('consejo')
+            .get()
+            .then(array => {
+                // forma = { ...forma, ...form.data() }
+                array.forEach(doc => {
+                    var obj = { ...doc.data() };
+                    obj.id = doc.id;
+                    arreglo.push(obj);
+                })
+                if (arreglo.length > 0) { setArr(arreglo); console.log("arr", arr) }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [user, actualizar]);
+
+
     return (
         <View style={{ flexDirection: "column", height: '100%', width: '100%' }}>
-            <View style={{ flexDirection: "row", height: '15%', width: '100%' }}>
+            <View style={{ flexDirection: "row", height: 80, width: '100%' }}>
                 <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#A1C8D2' }}>
                     <Image source={require('../../img/consejos.png')}
                         style={{ width: '90%', height: '90%', borderRadius: 30, alignSelf: 'center', marginVertical: 5 }}
                     />
                 </View>
-                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#A1C8D2', paddingVertical: 28 }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#A1C8D2', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.text}>Consejos</Text>
+
+
+                    {
+                        user.uid == 'IdXiTtKd8LaNFq6IVZ3HlBg5G5z1'
+                            ?
+                            <TouchableOpacity onPress={() => { actualizarData() }} style={{
+                                height: '40%', width: '70%', alignContent: 'center', alignItems: "center",
+                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147"
+                            }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>{actualizar ? 'Actualizar' : 'Agregar'}</Text>
+                            </TouchableOpacity>
+                            :
+                            <View></View>
+                    }
                 </View>
+            </View >
+
+            <View style={{ flexDirection: "row", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#396371', padding: 10 }}>
+                {
+                    actualizar
+                        ?
+                        <View style={{ flexDirection: "row", height: '100%', width: '100%', backgroundColor: '#396371', overflow: 'scroll' }}>
+                            <View style={{ flexDirection: "column", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#A1C8D2', borderRadius: 9, padding: 5, overflow: 'scroll' }}>
+                                <Text style={styles.textLeft}>Título</Text>
+                                <TextInput style={styles.textRight} defaultValue={formulario.titulo} onChange={(e) => {
+                                    onChangeText(e.nativeEvent.text, 'titulo')
+                                }}></TextInput>
+                                <Text style={styles.textLeft}>Consejo</Text>
+                                <TextInput style={[styles.textRight, { height: '100%' }]} multiline={true} defaultValue={formulario.consejo} onChange={(e) => {
+                                    onChangeText(e.nativeEvent.text, 'consejo')
+                                }}></TextInput>
+                            </View>
+                        </View>
+                        :
+                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#A1C8D2', borderRadius: 20, padding: 5, paddingTop: 0 }}>
+                            {
+                                arr.length > 0
+                                    ?
+                                    <CardList arr={arr} setForm={setFormulario} setActualizar={(() => { setActualizar(!actualizar) })} user={user} />
+                                    :
+                                    <View></View>
+                            }
+                        </View>
+                }
             </View>
-
-            <View style={{ flexDirection: "row", height: '100%', width: '100%', backgroundColor: '#396371', padding: 20 }}>
-                <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#A1C8D2', borderRadius: 20, padding: 5 }}>
-                    <CardAdviceComponent img={imgs[0]} title={title[0]} description={description[0]}></CardAdviceComponent>
-                    <CardAdviceComponent img={imgs[1]} title={title[1]} description={description[1]}></CardAdviceComponent>
-                    <CardAdviceComponent img={imgs[2]} title={title[2]} description={description[2]}></CardAdviceComponent>
-                </View>
-            </View>
-
-
         </View >
+    );
+}
+
+function CardList(props) {
+    const { arr, setForm, setActualizar, user } = props;
+    console.log(arr)
+    var numbers = arr
+    const sayHi = (a) => {
+        setForm(a)
+        setActualizar()
+    }
+    console.log(numbers)
+    const listItems = numbers.map((a, index) =>
+        // Correcto! La key debería ser especificada dentro del array.
+        <View key={index}>
+            <CardAdviceComponent setText={(() => { sayHi(a) })} title={a.titulo} description={a.consejo} numero={index + 1} user={user} />
+        </View>
+    );
+    return (
+        <View>
+            {listItems}
+        </View>
     );
 }
 
@@ -60,16 +166,19 @@ const styles = StyleSheet.create({
     },
     textLeft: {
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 18,
         color: '#534646',
         marginVertical: '1%',
+        padding: 3,
         marginLeft: 12
     },
     textRight: {
-        fontSize: 20,
-        color: '#534646',
+        fontSize: 16,
+        color: '#4B4B4B',
+        padding: 10,
         marginVertical: '1%',
-        marginLeft: 12
+        backgroundColor: '#A3E5FFC7',
+        borderRadius: 5,
     },
 
     img: {

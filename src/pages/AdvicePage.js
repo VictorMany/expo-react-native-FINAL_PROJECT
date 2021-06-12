@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import AdviceComponent from '../components/AdviceComponents/AdviceComponent';
-import AsistanceComponent from '../components/AsistanceComponents/AsistanceComponent';
+import firebase from '../utils/firebase';
+import 'firebase/firestore'
 
 
 
-const AdvicePage = () => {
 
-    const [nombreHospital, setNombreHospital] = useState('Hospital General de lEON');
-    const [direccion, setDireccion] = useState('Calle 20 de Enero 927, Obregón.');
-    const [telefono, setTelefono] = useState('477 719 7100');
-    
+const AdvicePage = ({ route }) => {
     return (
         <View>
-            <AdviceComponent NombreHospital={nombreHospital} Direccion={direccion} Telefono={telefono}></AdviceComponent>
+            <AdviceComponent user={route.params.user}></AdviceComponent>
         </View >
     )
 }
