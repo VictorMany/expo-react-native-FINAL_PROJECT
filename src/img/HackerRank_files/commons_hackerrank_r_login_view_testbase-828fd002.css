@@ -1,0 +1,5 @@
+.prefetch-assets-wrapper__asset--hide{position:absolute;top:-10000px;left:-10000px;visibility:hidden}
+.webcam-permission-dialog__status{margin-bottom:10px;font-size:16px}.webcam-permission-dialog__status--error{color:#d11534}.webcam-permission-dialog__camera{margin-bottom:20px;background:#39424e}
+.ui-btn.skip-to-main-content{position:absolute;top:-999px;left:-999px;z-index:-10000;overflow:hidden;width:1px;height:1px}.ui-btn.skip-to-main-content:focus,.ui-btn.skip-to-main-content:hover{top:auto;left:0;z-index:10000;width:-webkit-max-content;width:-moz-max-content;width:max-content;height:40px}#main-content:focus{outline-width:0}.keyboard-active #main-content:focus{overflow:auto;outline-width:3px;outline-style:solid;outline-offset:10px}
+
+/*# sourceMappingURL=https://hrcdn.net/candidate-site/assets/sourcemaps/commons~hackerrank_r_login_view~testbase-828fd002.css.map*/

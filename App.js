@@ -11,7 +11,9 @@ import AsistancePage from './src/pages/AsistancePage';
 import ProfileComponent from './src/components/StatusProfile/ProfileComponent';
 import firebase from './src/utils/firebase';
 import 'firebase/auth'
+import { LogBox } from 'react-native';
 
+LogBox.ignoreAllLogs(true)
 const Stack = createStackNavigator();
 
 const myApp = () => {
@@ -29,44 +31,42 @@ const myApp = () => {
 
         <Stack.Screen name="HomePage" options={{
           title: 'Regreso seguro', headerTintColor: 'white', headerStyle: {
-            backgroundColor: '#29444D'
+            backgroundColor: '#121618'
           },
         }} component={HomePage} />
 
         <Stack.Screen name="LoginPage" options={{
-          title: 'Login'
+          headerShown: false
         }} component={LoginPage} />
 
         <Stack.Screen name="RegisterPage" component={RegisterPage} options={{
-          title: 'Registro', headerTintColor: '#29444D'
+          title: '', headerTintColor: '#121618'
         }} />
         <Stack.Screen name="Consejos" component={AdvicePage} options={{
           title: 'Consejos', headerTintColor: 'white', headerStyle: {
-            backgroundColor: '#29444D'
+            backgroundColor: '#121618'
           },
         }} />
         <Stack.Screen name="Datos" options={{
           title: 'Datos personales', headerTintColor: 'white', headerStyle: {
-            backgroundColor: '#29444D'
+            backgroundColor: '#121618'
           },// headerShown: false
         }} component={DataPage} />
 
 
         <Stack.Screen name="Expediente" component={FilePage} options={{
-          title: 'Expediente Médico', headerTintColor: 'white', headerStyle: { backgroundColor: '#29444D' },
+          title: 'Expediente Médico', headerTintColor: 'white', headerStyle: { backgroundColor: '#121618' },
           //headerShown: false
         }} />
 
         <Stack.Screen name="Asistencia" options={{
           title: 'Asistencia', headerTintColor: 'white', headerStyle: {
-            backgroundColor: '#29444D'
+            backgroundColor: '#121618'
           },
         }} component={AsistancePage} />
 
         <Stack.Screen name="profile" options={{
-          title: 'Estatus de hoy', headerTintColor: 'white', headerStyle: {
-            backgroundColor: '#29444D'
-          },
+          headerShown: false
         }} component={ProfileComponent} />
       </Stack.Navigator>
     </NavigationContainer>

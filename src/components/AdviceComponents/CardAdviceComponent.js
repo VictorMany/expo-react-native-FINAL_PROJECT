@@ -26,7 +26,7 @@ export default function CardAdviceComponent(props) {
                 </View>
                 <View style={{ flexDirection: "column", width: '80%', height: '100%', padding: 10 }}>
                     <Text style={styles.text}>{title}</Text>
-                    <Text style={styles.textDetail}>{description}</Text>
+                    <Text style={styles.textDetail}>{description} </Text>
                 </View>
             </View>
         )

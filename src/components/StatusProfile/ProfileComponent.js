@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, Alert, Switch, TextInput } from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity, Alert, Switch, TextInput, ScrollView } from 'react-native';
 import firebase from '../../utils/firebase';
 import 'firebase/firestore'
 
 
-export default function ProfileComponent({ route }) {
+export default function ProfileComponent({ route, navigation }) {
 
 
     //Ya están
@@ -12,6 +12,7 @@ export default function ProfileComponent({ route }) {
     const [arr, setArr] = useState([])
     const [formulario, setFormulario] = useState({})
     const [user, setUser] = useState('');
+
 
     var form = {
         estatus: false,
@@ -54,12 +55,25 @@ export default function ProfileComponent({ route }) {
         //setFormulario(form.pregunta)
     }
 
+    var mes = new Date().getMonth()
+    mes = parseInt(mes)
+    const subirEstate = async (riesgo) => {
+        let formActualizado = {
+            riesgo: riesgo,
+            validado: '24Hrs',
+            vence: new Date().getDate() + '/' + (mes + 1) + '/' + new Date().getFullYear()
+        }
+
+        console.log(formActualizado)
+        console.log(user.uid)
+        await firebase.firestore().collection('estatus').doc(user.uid).set(formActualizado);
+    }
+
     //Ya está
     useEffect(() => {
         setUser(route.params.user);
+
         //console.log(response)
-
-
         var arreglo = []
         firebase.firestore().collection('estado_salud').doc('IdXiTtKd8LaNFq6IVZ3HlBg5G5z1').collection('estado_salud')
             .get()
@@ -80,34 +94,121 @@ export default function ProfileComponent({ route }) {
     }, [user, actualizar]);
 
     //Alert
-    const createTwoButtonAlert = () =>
-        Alert.alert(
-            'Alert Title',
-            'My Alert Msg',
-            [
-                {
-                    text: 'Ask me later',
-                    onPress: () => console.log('Ask me later pressed')
-                },
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel'
-                },
-                { text: 'OK', onPress: () => console.log('OK Pressed') }
-            ],
-            { cancelable: false }
-        );
+
+    const createTwoButtonAlert = async () => {
+        let arr = [];
+        var contador = 0;
+        var estatus = 'No hay'
+
+        firebase.firestore().collection('estado_salud').doc('IdXiTtKd8LaNFq6IVZ3HlBg5G5z1').collection('estado_salud')
+            .get()
+            .then(array => {
+                // forma = { ...forma, ...form.data() }
+                array.forEach(doc => {
+                    var obj = { ...doc.data() };
+                    obj.id = doc.id;
+                    arr.push(obj);
+                    if (obj.estatus) {
+                        contador++;
+                    }
+                })
+                return contador
+            })
+            .then((con) => {
+                console.log(con)
+                console.log(arr.length)
+                let an = con * 100 / arr.length;
+                console.log(an)
+
+                switch (true) {
+                    case an < 40:
+                        console.log('bajo')
+                        Alert.alert(
+                            'Tu riesgo de contagio es: ',
+                            'Bajo',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log('Cancel Pressed'),
+                                    style: 'cancel'
+                                },
+                                { text: 'OK', onPress: () => console.log('OK Pressed') }
+                            ],
+                            { cancelable: false }
+                        );
+
+                        subirEstate('Bajo');
+
+                        break;
+                    case an >= 40 && an <= 60:
+                        Alert.alert(
+                            'Tu estado de salud',
+                            'Medio',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log('Cancel Pressed'),
+                                    style: 'cancel'
+                                },
+                                { text: 'OK', onPress: () => console.log('OK Pressed') }
+                            ],
+                            { cancelable: false }
+                        );
+                        subirEstate('Medio');
+
+                        break;
+                    case an > 60:
+                        Alert.alert(
+                            'Tu estado de salud',
+                            'Alto',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log('Cancel Pressed'),
+                                    style: 'cancel'
+                                },
+                                { text: 'OK', onPress: () => console.log('OK Pressed') }
+                            ],
+                            { cancelable: false }
+                        );
+                        subirEstate('Alto');
+                        break;
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+        console.log(estatus);
+
+
+    }
 
     return (
-        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#396371' }}>
+        <View style={{ flexDirection: "column", height: '93%', width: '100%', backgroundColor: '#121618' }}>
+            <TouchableOpacity style={{
+
+                height: 60, width: '100%', alignContent: 'center', alignItems: "center",
+                justifyContent: "center", alignSelf: 'center',  backgroundColor: "#2B6CA1", marginTop: 27
+            }} onPress={
+                () => {
+                    navigation.replace('HomePage')
+                }
+
+            } >
+                <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Salir</Text>
+            </TouchableOpacity>
+
             <View style={{ flexDirection: "row", height: 80, width: '100%' }}>
-                <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#A1C8D2' }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#AFB9BB' }}>
                     <Image source={require('../../img/estado.jpg')}
                         style={{ width: '90%', height: '90%', borderRadius: 30, alignSelf: 'center', marginVertical: 5 }}
                     />
                 </View>
-                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#A1C8D2', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+
+
+
+                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#AFB9BB', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.text}>Mi estado de salud</Text>
                     {
                         //Si nuestro usuario tiene privilegios de administrador
@@ -115,33 +216,38 @@ export default function ProfileComponent({ route }) {
                             ?
                             <TouchableOpacity onPress={() => { actualizarData() }} style={{
                                 height: '40%', width: '70%', alignContent: 'center', alignItems: "center",
-                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147"
+                                
+                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#878865"
                             }}>
                                 <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }} >{actualizar && formulario.pregunta ? 'Actualizar' : 'Agregar'}</Text>
                             </TouchableOpacity>
                             :
-                            <TouchableOpacity onPress={() => createTwoButtonAlert} style={{
+                            <TouchableOpacity onPressIn={createTwoButtonAlert} style={{
                                 height: '40%', width: '70%', alignContent: 'center', alignItems: "center",
-                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147"
+                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#878865"
                             }}>
                                 <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }} >Guardar cambios</Text>
                             </TouchableOpacity>
                     }
                 </View>
             </View>
-            <View style={{ flexDirection: "row", height: '87%', width: '100%', backgroundColor: '#396371', padding: 10 }}>
-                <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#A1C8D2', borderRadius: 10, padding: 5, overflow: 'scroll' }}>
+            <View style={{ flexDirection: "row", height: '87%', width: '100%', backgroundColor: '#121618', padding: 10 }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#AFB9BB', borderRadius: 10, padding: 5, overflow: 'scroll' }}>
                     {
                         actualizar
                             ?
-                            <View style={{ flexDirection: "column", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#A1C8D2', borderRadius: 9, padding: 5, overflow: 'scroll' }}>
+                            <View style={{ flexDirection: "column", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#AFB9BB', borderRadius: 9, padding: 5, overflow: 'scroll' }}>
                                 <Text style={styles.textLeft}>Pregunta</Text>
-                                <TextInput style={[styles.textRight2, { height: '80%' }]} multiline={true} defaultValue={formulario.pregunta} onChange={(e) => {
+                                <TextInput style={[styles.textRight2, { height: '90%', textAlignVertical: 'top' }]} multiline={true} defaultValue={formulario.pregunta} onChange={(e) => {
                                     onChangeText(e.nativeEvent.text, 'pregunta')
-                                }}></TextInput>
+                                }}>
+
+                                </TextInput>
                             </View>
                             :
-                            <CardList user={user} arr={arr} setForm={setFormulario} setActualizar={(() => { setActualizar(!actualizar) })}></CardList>
+                            <ScrollView>
+                                <CardList user={user} arr={arr} setForm={setFormulario} setActualizar={(() => { setActualizar(!actualizar) })}></CardList>
+                            </ScrollView>
                     }
                 </View>
             </View>
@@ -197,11 +303,11 @@ function CardQuestions(props) {
 
 
     return (
-        <View style={{ flexDirection: "row", height: 'auto', width: '100%', backgroundColor: '#141313', borderRadius: 20, marginTop: 10 }} >
+        <View style={{ flexDirection: "row", height: 100, width: '100%', backgroundColor: '#141313', borderRadius: 20, marginTop: 10 }} >
             <View style={{ flexDirection: "column", width: '20%', height: '100%', alignContent: 'center', alignItems: 'center', alignSelf: 'center', paddingVertical: '12%' }}>
                 <Switch
-                    trackColor={{ false: "#727272", true: "#FFFFFF" }}
-                    thumbColor={isEnabled ? "#727272" : "#FFFFFF"}
+                    trackColor={{ false: "#868686", true: "#FFB553" }}
+                    thumbColor={isEnabled ? "#868686" : "#FFB553"}
                     onValueChange={() => toggleSwitch(id, estatus, pregunta)}
                     value={isEnabled}
                 />
@@ -219,12 +325,13 @@ function CardQuestions(props) {
         </View >
     );
 }
+
 const styles = StyleSheet.create({
 
     text: {
         fontWeight: 'bold',
         fontSize: 24,
-        color: '#396371',
+        color: '#121618',
         textAlignVertical: 'center',
         marginLeft: 12
     },
@@ -253,7 +360,7 @@ const styles = StyleSheet.create({
         color: '#4B4B4B',
         padding: 10,
         marginVertical: '1%',
-        backgroundColor: '#A3E5FFC7',
+        backgroundColor: '#E3E8EBC7',
         borderRadius: 5,
     },
 

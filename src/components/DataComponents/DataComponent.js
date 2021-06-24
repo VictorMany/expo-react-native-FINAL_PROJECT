@@ -75,18 +75,18 @@ export default function DataComponent(props) {
     }
 
     return (
-        <View style={{ flexDirection: "column", height: '100%', width: '100%' }}>
+        <View style={{ flexDirection: "column", height: '80%', width: '100%' }}>
             <View style={{ flexDirection: "row", height: 80, width: '100%' }}>
-                <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#A1C8D2' }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#AFB9BB' }}>
                     <Image source={require('../../img/datos.png')}
                         style={{ width: '90%', height: '90%', borderRadius: 30, alignSelf: 'center', marginVertical: 5 }}
                     />
                 </View>
-                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#A1C8D2', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#AFB9BB', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.text}>Datos de la Cuenta</Text>
                     <TouchableOpacity onPress={() => { actualizarData() }} style={{
                         height: '40%', width: '70%', alignContent: 'center', alignItems: "center",
-                        justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147"
+                        justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#878865"
                     }}>
                         {
                             actualizar
@@ -101,8 +101,8 @@ export default function DataComponent(props) {
 
             {
                 actualizar ?
-                    <View style={{ flexDirection: "row", height: '110%', width: '100%', backgroundColor: '#396371', padding: 20 }}>
-                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#A1C8D2', borderRadius: 8, padding: 5, overflow: 'scroll' }}>
+                    <View style={{ flexDirection: "row", height: '110%', width: '100%', backgroundColor: '#121618', padding: 20 }}>
+                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#AFB9BB', borderRadius: 8, padding: 5, overflow: 'scroll' }}>
                             <Text style={styles.textLeft}>Nombre</Text>
                             <TextInput style={styles.textRight} defaultValue={doc.nombre} onChange={(e) => {
                                 onChangeText(e.nativeEvent.text, 'nombre')
@@ -122,8 +122,8 @@ export default function DataComponent(props) {
                         </View>
                     </View>
                     :
-                    <View style={{ flexDirection: "row", height: '110%', width: '100%', backgroundColor: '#396371', padding: 20 }}>
-                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#A1C8D2', borderRadius: 8, padding: 5, overflow: 'scroll' }}>
+                    <View style={{ flexDirection: "row", height: '110%', width: '100%', backgroundColor: '#121618', padding: 20 }}>
+                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#AFB9BB', borderRadius: 8, padding: 5, overflow: 'scroll' }}>
                             <Text style={styles.textLeft}>Nombre</Text>
                             <Text style={styles.textRight} >{doc.nombre}</Text>
                             <Text style={styles.textLeft}>Carrera</Text>
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: 'bold',
         fontSize: 24,
-        color: '#396371',
+        color: '#121618',
         textAlignVertical: 'center',
         marginLeft: 12
     },
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
         color: '#4B4B4B',
         padding: 10,
         marginVertical: '1%',
-        backgroundColor: '#A3E5FFC7',
+        backgroundColor: '#E3E8EBC7',
+        
         borderRadius: 5
     },
 

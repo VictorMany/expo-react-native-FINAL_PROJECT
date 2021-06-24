@@ -10,7 +10,7 @@ export default function CardComponent(props) {
     return (
         <TouchableOpacity style={{ borderRadius: 50 }} onPressIn={() => { setText(text) }} onPress={action}>
             <ImageBackground source={img}
-                style={{ width: "100%", height: '85%' }}
+                style={{ width: 180, height: 180 }}
             >
                 <View style={styles.div}>
                     <Text style={styles.text}>{text}</Text>
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         width: '90%',
         height: '20%',
-        marginTop: 110,
+        marginTop: 150,
         alignSelf: 'flex-end',
         backgroundColor: '#00000090',
         borderRadius: 5,

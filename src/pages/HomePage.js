@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
 import CardComponent from '../components/HomeComponents/cardComponent';
 import firebase from '../utils/firebase';
 import 'firebase/firestore'
@@ -7,6 +7,7 @@ import 'firebase/firestore'
 
 const HomePage = ({ navigation }) => {
     const [text, setText] = useState('');
+
     const [imgs, setimages] = useState([
         require('../img/datos.png'),
         require('../img/asistencia.png'),
@@ -28,27 +29,30 @@ const HomePage = ({ navigation }) => {
             console.log(response)
         });
 
-        firebase.firestore().collection('estatus').doc(user.uid)
-            .get()
-            .then(form => {
-                var forma = {
-                    riesgo: '',
-                    validado: '',
-                    vence: '',
-                }
+        if (user) {
+            firebase.firestore().collection('estatus').doc(user.uid)
+                .get()
+                .then(form => {
+                    var forma = {
+                        riesgo: '',
+                        validado: '',
+                        vence: '',
+                    }
 
-                forma = { ...forma, ...form.data() }
+                    forma = { ...forma, ...form.data() }
 
-                console.log(form.data())
-                if (form.data() != undefined) {
-                    setResumenSalud(forma);
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        console.log(resumenSalud)
-    }, [user]);
+                    console.log(form.data())
+                    if (form.data() != undefined) {
+                        setResumenSalud(forma);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+            console.log(resumenSalud)
+        }
+
+    }, [user || resumenSalud]);
 
 
     const action = async () => {
@@ -56,12 +60,16 @@ const HomePage = ({ navigation }) => {
     };
 
     return (
-        <View style={{ backgroundColor: "#396371", height: "100%" }}>
+
+
+        <ImageBackground source={require('../img/fondo.jpeg')}
+            style={{ height: '100%', width: '100%' }}
+        >
             <View style={{
                 // Try setting `flexDirection` to `"row"`.
                 flexDirection: "row",
                 padding: 10,
-                backgroundColor: '#A1C8D2',
+                backgroundColor: '#8EAFB8',
                 height: '20%',
                 width: '95%',
                 borderRadius: 10,
@@ -69,47 +77,74 @@ const HomePage = ({ navigation }) => {
                 marginTop: 10
 
             }}>
-                <View style={{ width: '35%', height: '100%', padding: 5 }}>
+                <View style={{ width: '35%', padding: 10 }}>
                     <Image source={require('../img/perfil.png')}
-                        style={{ width: 85, height: 85, borderRadius: '50%' }}
+                        style={{ width: 95, height: 95, borderRadius: 100 }}
                     /></View>
-                <View style={[styles.container, {
-                    // Try setting `flexDirection` to `"row"`.
-                    flexDirection: "row",
-                    width: '58%',
-                    padding: 10,
-                    backgroundColor: "#A1E8D2",
-                    borderRadius: 10,
-                    margin: 10,
-                    height: '79%',
-                    marginTop: 12
-                }]}>
-                    <View style={{
-                        // Try setting `flexDirection` to `"row"`.
-                        flexDirection: "column",
-                        width: '50%',
-                    }}>
-                        <View style={{ flex: 1, }}><Text style={[styles.textoIzquiera]}>Riesgo</Text></View>
-                        <View style={{ flex: 1, }}><Text style={[styles.textoIzquiera]}>Validado</Text></View>
-                        <View style={{ flex: 1, }}><Text style={[styles.textoIzquiera]}>Vence</Text></View>
-                    </View>
-                    <View style={{
-                        // Try setting `flexDirection` to `"row"`.
-                        flexDirection: "column",
-                        width: '50%',
-                    }}>
-                        <View style={{ flex: 1, }}><Text style={{ color: 'green', fontWeight: 'bold' }}>{resumenSalud.riesgo}</Text></View>
-                        <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>{resumenSalud.validado}</Text></View>
-                        <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>{resumenSalud.vence}</Text></View>
-                    </View>
-                </View>
+                {
+                    (user) ?
+                        user.uid === 'IdXiTtKd8LaNFq6IVZ3HlBg5G5z1'
+                            ?
+                            <View style={[styles.container, {
+                                // Try setting `flexDirection` to `"row"`.
+                                flexDirection: "row",
+                                width: '58%',
+                                padding: 10,
+                                backgroundColor: "#BDD8D0",
+                                borderRadius: 10,
+                                margin: 10,
+                                height: '79%',
+                                marginTop: 12,
+                                textAlign: 'center',
+                                alignContent: 'center',
+                                alignItems: 'center'
+                            }]}>
+
+                                <Text style={{ color: 'green', fontWeight: 'bold', fontSize: 25, textAlign: 'center', alignSelf: 'center', alignContent: 'center' }}>ADMINISTRADOR</Text>
+
+                            </View>
+
+                            :
+                            <View style={[styles.container, {
+                                // Try setting `flexDirection` to `"row"`.
+                                flexDirection: "row",
+                                width: '58%',
+                                padding: 10,
+                                backgroundColor: "#BDD8D0",
+                                borderRadius: 10,
+                                margin: 10,
+                                height: '79%',
+                                marginTop: 12
+                            }]}>
+                                <View style={{
+                                    // Try setting `flexDirection` to `"row"`.
+                                    flexDirection: "column",
+                                    width: '50%',
+                                }}>
+                                    <View style={{ flex: 1, }}><Text style={[styles.textoIzquiera]}>Riesgo</Text></View>
+                                    <View style={{ flex: 1, }}><Text style={[styles.textoIzquiera]}>Validado</Text></View>
+                                    <View style={{ flex: 1, }}><Text style={[styles.textoIzquiera]}>Vence</Text></View>
+                                </View>
+                                <View style={{
+                                    // Try setting `flexDirection` to `"row"`.
+                                    flexDirection: "column",
+                                    width: '50%',
+                                }}>
+                                    <View style={{ flex: 1, }}><Text style={{ color: 'green', fontWeight: 'bold' }}>{resumenSalud.riesgo}</Text></View>
+                                    <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>{resumenSalud.validado}</Text></View>
+                                    <View style={{ flex: 1, }}><Text style={{ color: '#676D69' }}>{resumenSalud.vence}</Text></View>
+                                </View>
+                            </View>
+                        :
+                        null
+                }
             </View >
 
             <View style={{
                 flexDirection: "row",
                 width: '100%',
-                height: '60%',
-                marginTop: 5
+                height: 450,
+                marginTop: 10
             }}>
                 <View style={[styles.containerColumn, { paddingLeft: 10 }]}>
                     <View style={styles.container1}>
@@ -141,25 +176,31 @@ const HomePage = ({ navigation }) => {
             <View style={{
                 alignItems: "center",
                 justifyContent: "center",
-                marginTop: 10,
-                backgroundColor: "#29444D",
+                marginTop: 0,
+                backgroundColor: "#121618",
                 alignContent: 'center',
                 height: '20%',
                 width: '100%'
             }}>
                 <TouchableOpacity style={{
-                    height: '40%', width: '90%', alignContent: 'center', alignItems: "center",
-                    justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147", marginBottom: 10
-                }} onPress={() => navigation.navigate('profile', { user: user })}>
+                    height: 50, width: '90%', alignContent: 'center', alignItems: "center",
+                    justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#878865", marginBottom: 12
+                }} onPress={
+                    () => {
+                        navigation.replace('profile', { user: user })
+
+                    }
+
+                } >
                     <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Actualizar mi estado</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{
                     height: '40%', width: '100%', alignContent: 'center', alignItems: "center",
                     justifyContent: "center", alignSelf: 'center', backgroundColor: "#2B68A1", marginBottom: -10
-                }} onPress={() => {
-                    navigation.replace('LoginPage');
-                    firebase.auth().signOut().then(() => {
+                }} onPress={async () => {
+                    await navigation.replace('LoginPage');
+                    await firebase.auth().signOut().then(() => {
                         console.log("El usuario salió");
                     }).catch(err => {
                         console.log(err);
@@ -168,7 +209,8 @@ const HomePage = ({ navigation }) => {
                     <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>Cerrar sesión</Text>
                 </TouchableOpacity>
             </View>
-        </View >
+
+        </ImageBackground>
     )
 }
 const styles = StyleSheet.create({
@@ -196,7 +238,7 @@ const styles = StyleSheet.create({
     containerColumn: {
         flexDirection: "column",
         width: '50%',
-        height: '100%',
+        height: 430,
     }
 });
 

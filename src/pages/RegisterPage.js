@@ -63,18 +63,18 @@ const RegisterPage = ({ navigation }) => {
             <Text
                 style={{
                     fontSize: 30,
-                    fontFamily: "SemiBold",
+
                     alignSelf: "center",
                     fontWeight: 'bold',
                     marginTop: 10,
-                    color: '#29444D'
+                    color: '#121618'
                 }}
             >Registro</Text>
 
             <View style={[styles.viewContainer, formError.nombre && styles.errorInput]}>
                 <TextInput
                     placeholder="Nombre"
-                    placeholderTextColor="#29444D"
+                    placeholderTextColor="#121618"
                     style={[styles.textInputt]}
                     onChange={(e) => setFormData({ ...formData, nombre: e.nativeEvent.text })}
                 />
@@ -85,7 +85,7 @@ const RegisterPage = ({ navigation }) => {
                 <TextInput
                     placeholder="Edad"
                     keyboardType="numeric"
-                    placeholderTextColor="#29444D"
+                    placeholderTextColor="#121618"
                     onChange={(e) => setFormData({ ...formData, edad: e.nativeEvent.text })}
                     style={[styles.textInputt]}
                 />
@@ -94,7 +94,7 @@ const RegisterPage = ({ navigation }) => {
             <View style={[styles.viewContainer, formError.email && styles.errorInput]}>
                 <TextInput
                     placeholder="Email"
-                    placeholderTextColor="#29444D"
+                    placeholderTextColor="#121618"
                     onChange={(e) => setFormData({ ...formData, email: e.nativeEvent.text })}
                     style={[styles.textInputt]}
                 />
@@ -107,7 +107,7 @@ const RegisterPage = ({ navigation }) => {
                 <TextInput
                     secureTextEntry
                     placeholder="Password"
-                    placeholderTextColor="#29444D"
+                    placeholderTextColor="#121618"
                     onChange={(e) => setFormData({ ...formData, password: e.nativeEvent.text })}
                     style={[styles.textInputt]}
 
@@ -122,7 +122,7 @@ const RegisterPage = ({ navigation }) => {
                     alignItems: "center",
                     justifyContent: "center",
                     marginTop: 30,
-                    backgroundColor: "#29444D",
+                    backgroundColor: "#121618",
                     paddingVertical: 10,
                     borderRadius: 23,
                 }}>
@@ -130,8 +130,9 @@ const RegisterPage = ({ navigation }) => {
                     onPress={register}
                     style={{
                         color: "white",
-                        fontFamily: "SemiBold",
-                        height: '100%',
+                        height: 40,
+                        textAlignVertical: 'center',
+                        fontWeight: 'bold',
                         width: '100%',
                         textAlign: 'center'
                     }}>Register</Text>
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         marginTop: 20,
         paddingHorizontal: 10,
-        borderColor: "#29444D",
+        borderColor: "#121618",
         borderRadius: 23,
         paddingVertical: 2
     },

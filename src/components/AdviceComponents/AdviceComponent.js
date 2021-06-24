@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import CardAdviceComponent from './CardAdviceComponent'
 import firebase from '../../utils/firebase';
 import 'firebase/firestore'
@@ -77,21 +77,19 @@ export default function AdviceComponent(props) {
     return (
         <View style={{ flexDirection: "column", height: '100%', width: '100%' }}>
             <View style={{ flexDirection: "row", height: 80, width: '100%' }}>
-                <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#A1C8D2' }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '25%', backgroundColor: '#AFB9BB' }}>
                     <Image source={require('../../img/consejos.png')}
                         style={{ width: '90%', height: '90%', borderRadius: 30, alignSelf: 'center', marginVertical: 5 }}
                     />
                 </View>
-                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#A1C8D2', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ flexDirection: "column", height: '100%', width: '75%', backgroundColor: '#AFB9BB', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.text}>Consejos</Text>
-
-
                     {
                         user.uid == 'IdXiTtKd8LaNFq6IVZ3HlBg5G5z1'
                             ?
                             <TouchableOpacity onPress={() => { actualizarData() }} style={{
                                 height: '40%', width: '70%', alignContent: 'center', alignItems: "center",
-                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#2BA147"
+                                justifyContent: "center", alignSelf: 'center', borderRadius: 23, backgroundColor: "#878865"
                             }}>
                                 <Text style={{ color: 'white', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 20, textAlign: 'center' }}>{actualizar ? 'Actualizar' : 'Agregar'}</Text>
                             </TouchableOpacity>
@@ -100,29 +98,32 @@ export default function AdviceComponent(props) {
                     }
                 </View>
             </View >
+            
 
-            <View style={{ flexDirection: "row", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#396371', padding: 10 }}>
+            <View style={{ flexDirection: "row", height: '90%', minHeight: 500, width: '100%', backgroundColor: '#121618', padding: 10 }}>
                 {
                     actualizar
                         ?
-                        <View style={{ flexDirection: "row", height: '100%', width: '100%', backgroundColor: '#396371', overflow: 'scroll' }}>
-                            <View style={{ flexDirection: "column", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#A1C8D2', borderRadius: 9, padding: 5, overflow: 'scroll' }}>
+                        <View style={{ flexDirection: "row", height: '95%', width: '100%', backgroundColor: '#121618', overflow: 'scroll' }}>
+                            <View style={{ flexDirection: "column", height: '100%', minHeight: 500, width: '100%', backgroundColor: '#AFB9BB', borderRadius: 9, padding: 10, overflow: 'scroll' }}>
                                 <Text style={styles.textLeft}>Título</Text>
                                 <TextInput style={styles.textRight} defaultValue={formulario.titulo} onChange={(e) => {
                                     onChangeText(e.nativeEvent.text, 'titulo')
                                 }}></TextInput>
                                 <Text style={styles.textLeft}>Consejo</Text>
-                                <TextInput style={[styles.textRight, { height: '100%' }]} multiline={true} defaultValue={formulario.consejo} onChange={(e) => {
+                                <TextInput style={[styles.textRight, { height: '75%', textAlignVertical: 'top' }]} multiline={true} defaultValue={formulario.consejo} onChange={(e) => {
                                     onChangeText(e.nativeEvent.text, 'consejo')
                                 }}></TextInput>
                             </View>
                         </View>
                         :
-                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#A1C8D2', borderRadius: 20, padding: 5, paddingTop: 0 }}>
+                        <View style={{ flexDirection: "column", height: '100%', width: '100%', backgroundColor: '#AFB9BB', borderRadius: 20, padding: 5, paddingTop: 0 }}>
                             {
                                 arr.length > 0
                                     ?
-                                    <CardList arr={arr} setForm={setFormulario} setActualizar={(() => { setActualizar(!actualizar) })} user={user} />
+                                    <ScrollView>
+                                        <CardList arr={arr} setForm={setFormulario} setActualizar={(() => { setActualizar(!actualizar) })} user={user} />
+                                    </ScrollView>
                                     :
                                     <View></View>
                             }
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: 'bold',
         fontSize: 24,
-        color: '#396371',
+        color: '#121618',
         textAlignVertical: 'center',
         marginLeft: 12
     },
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
         color: '#4B4B4B',
         padding: 10,
         marginVertical: '1%',
-        backgroundColor: '#A3E5FFC7',
+        backgroundColor: '#E3E8EBC7',
         borderRadius: 5,
     },
 
